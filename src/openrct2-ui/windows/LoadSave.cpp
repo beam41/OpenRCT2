@@ -419,19 +419,9 @@ static u8string Browse(bool isSave)
     desc.Type = isSave ? OpenRCT2::Ui::FileDialogType::Save : OpenRCT2::Ui::FileDialogType::Open;
     desc.DefaultFilename = isSave ? path : u8string();
 
-    // Add 'all files' filter. If the number of filters is increased, this code will need to be adjusted.
-    desc.Filters.emplace_back(language_get_string(STR_ALL_FILES), "*");
-
     desc.Title = language_get_string(title);
 
     u8string outPath = ContextOpenCommonFileDialog(desc);
-    if (!outPath.empty())
-    {
-        // When the given save type was given, Windows still interprets a filename with a dot in its name as a custom extension,
-        // meaning files like "My Coaster v1.2" will not get the .td6 extension by default.
-        if (isSave && get_file_extension_type(outPath) != fileType)
-            outPath = Path::WithExtension(outPath, extension);
-    }
 
     return outPath;
 }
